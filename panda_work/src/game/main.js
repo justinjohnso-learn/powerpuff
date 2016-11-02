@@ -1,11 +1,12 @@
 game.module(
     'game.main'
 )
-.require(
-    'game.assets',
-    'game.objects',
-    'game.scenes'
-)
 .body(function() {
+
+game.addAsset('Ubuntu-logo.png');
+
+game.createScene('Main', {
+    backgroundColor: blue;
+});
 
 });
