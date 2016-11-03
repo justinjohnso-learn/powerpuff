@@ -1,13 +1,11 @@
 game.module(
-  'game.main'
+    'game.main'
 )
-
 .require(
     'game.assets',
     'game.objects',
     'game.scenes'
 )
-
 .body(function() {
 
 });
