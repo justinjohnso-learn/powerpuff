@@ -103,7 +103,7 @@ game.createClass('World', {
         for (g = 0; g < body.collideAgainst.length; g++) {
             body._collides.length = 0;
             group = this.collisionGroups[body.collideAgainst[g]];
-            
+
             if (!group) continue;
 
             for (i = group.length - 1; i >= 0; i--) {
@@ -357,7 +357,7 @@ game.createClass('Body', {
     **/
     setCollisionGroup: function(group) {
         if (this.world && typeof this.collisionGroup === 'number') this.world.removeBodyCollision(this);
-        this.collisionGroup = group;        
+        this.collisionGroup = group;
         if (this.world) this.world.addBodyCollision(this);
     },
 
