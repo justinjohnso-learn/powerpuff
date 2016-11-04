@@ -9,7 +9,7 @@ game.module(
 
 game.createScene('Main', {
     init: function() {
-        this.world = new game.World(0, 0);
+        this.world = new game.World(0, 2000);
         var floorBody = new game.Body({
             position: {
                 x: game.system.width / 2,

@@ -28,10 +28,10 @@ game.createClass('Player', {
             // 2 = pickup
             // 3 = obstacle
             // 4 = oneway
-            collideAgainst: [1],
+            collideAgainst: [1, 2, 3, 4],
             velocityLimit: {
-                x: 200,
-                y: 2000
+                x: 0,
+                y: 1200
             }
         });
         this.body.collide = this.collide.bind(this);
@@ -45,10 +45,10 @@ game.createClass('Player', {
     },
 
     jump: function() {
-        // if (!this.onGround || this.killed) return;
+        if (!this.onGround || this.killed) return;
 
-        // this.sprite.textures = this.jumpUpTextures;
-        this.body.position.x = this.body.position.x + 15;
+        this.sprite.textures = this.jumpUpTextures;
+        this.body.velocity.y = -this.body.velocityLimit.y;
         this.body.mass = 1;
         this.onGround = false;
     },
@@ -96,15 +96,15 @@ game.createClass('Player', {
 
         if (this.killed) return;
 
-        // if (this.body.velocity.y > 0) this.onGround = false;
+        if (this.body.velocity.y > 0) this.onGround = false;
 
         // Update sprite textures
-        // if (!this.onGround && this.body.velocity.y > 0 && this.sprite.textures !== this.jumpDownTextures) {
-        //     this.sprite.textures = this.jumpDownTextures;
-        // }
-        // if (this.onGround && this.sprite.textures !== this.runTextures) {
-        //     this.sprite.textures = this.runTextures;
-        // }
+        if (!this.onGround && this.body.velocity.y > 0 && this.sprite.textures !== this.jumpDownTextures) {
+            this.sprite.textures = this.jumpDownTextures;
+        }
+        if (this.onGround && this.sprite.textures !== this.runTextures) {
+            this.sprite.textures = this.runTextures;
+        }
     }
 });
 
