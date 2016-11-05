@@ -47,11 +47,15 @@ game.module(
         this.body.addShape(shape);
         // this.body.velocity.x = -this.body.velocityLimit.y;
         this.body.mass = 1;
-        // debugger
         this.body.collide = this.collide.bind(this);
         this.body.position.set(game.system.width * .5, game.system.height * .7);
 
+        this.hitScore = 0
+        this.missScore = 0
+        this.hitRatio = this.hitScore/this.missScore
+        this.pointScore = this.hitScore * this.hitRatio
     },
+
 
     punchLeft: function() {
       this.body.velocity.x = this.body.velocity.x - 50;
@@ -89,6 +93,10 @@ game.module(
         }
         else if (attacking === true){
           other.parent.kill();
+          var that = this
+          setTimeout(function(){
+            that.scoreCounter();
+          }, 200)
         }
       }
       else if (other.collisionGroup === 3){
@@ -98,8 +106,18 @@ game.module(
         }
         else if (attacking === true){
           other.parent.kill();
+          var that = this
+          setTimeout(function(){
+            that.scoreCounter();
+          }, 200)
         }
       }
+    },
+
+    scoreCounter: function(){
+      this.hitScore ++
+      debugger
+      console.log(this.hitScore)
     },
 
     kill: function() {
@@ -116,7 +134,8 @@ game.module(
         }
         this.sprite.position.x = this.body.position.x;
         this.sprite.position.y = this.body.position.y;
-    }
+    },
+
 
 
   });
@@ -137,7 +156,7 @@ game.module(
           //       x:x,
           //       y:y
           //   },
-          mass: 1,
+          mass: 1000,
           collisionGroup: 2,
           collideAgainst: [0, 1],
         });
@@ -162,14 +181,21 @@ game.module(
           this.body.mass = 0;
           this.onGround = true;
         }
+        else if (other.collisionGroup === 1){
 
+        }
       },
 
       kill: function() {
         this.body.velocity.x = -1000
         this.body.velocity.y = -400
-        this.body.mass = 1
+        // this.body.mass = 1
         this.onGround = false
+        var that = this;
+        setTimeout(function(){
+          that.body.remove()
+          that.sprite.remove()
+        }, 300)
       },
 
       win: function() {
@@ -198,6 +224,7 @@ game.module(
           //       x:x,
           //       y:y
           //   },
+          // force: (1, 5),
           mass: 1,
           collisionGroup: 3,
           collideAgainst: [0, 1],
@@ -231,6 +258,11 @@ game.module(
         this.body.velocity.y = 400
         this.body.mass = 1
         this.onGround = false
+        var that = this;
+        setTimeout(function(){
+          that.body.remove()
+          that.sprite.remove()
+        }, 300)
       },
 
       win: function() {

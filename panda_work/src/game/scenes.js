@@ -6,14 +6,15 @@ game.module(
   game.createScene('Main', {
     init: function() {
       // Creates physics world
-      this.world = new game.World(0, 20000);
+      this.world = new game.World(0, 2000);
+
 
       // Create background
-      bg = new game.TilingSprite('background.jpg');
+      bg = new game.TilingSprite('townsville_2.png');
       this.addObject(bg);
       this.stage.addChild(bg);
-      bg.scale.set(1.2, 1.2);
-      bg.position.set(1, -100);
+      bg.scale.set(1.45, 1.45);
+      bg.position.set(1, -400);
 
       // Create ground
       // Image
@@ -47,6 +48,7 @@ game.module(
       setInterval(function(){
         that.enemySpawn();
       }, 500)
+      this.scoreDisplay();
     },
 
     keydown: function(key) {
@@ -112,8 +114,14 @@ game.module(
         this.enemyRight = new game.EnemyRight();
         this.enemyRight.sprite.addTo(this.enemyContainer);
       }
-    }
+    },
 
+    scoreDisplay: function(){
+      // Add text
+      var text = new game.BitmapText('Hit Score: ' + this.player.hitScore, {font:'FridgeMagnets'});
+      text.position.set(game.system.width/2, 200)
+      this.stage.addChild(text);
+    }
 
 });
 
