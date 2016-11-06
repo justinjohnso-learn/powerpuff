@@ -5,12 +5,51 @@ game.module(
 
   game.createScene('Main', {
     init: function() {
+      game.scene.clear('Game');
+      game.scene.exit('Game');
+      // Create menu background
+      bg = new game.Sprite('backgrounds/the_girls.jpg');
+      this.addObject(bg);
+      this.stage.addChild(bg);
+      bg.anchor.set(.5, .5)
+      bg.scale.set(1, 1);
+      bg.position.set(game.system.width/2, game.system.height/2)
+
+      // Create menu logo
+      logo = new game.Sprite('backgrounds/logo.png')
+      this.addObject(logo);
+      this.stage.addChild(logo);
+      logo.anchor.set(.5, .5)
+      logo.scale.set(.5, .5);
+      logo.position.set(game.system.width * .54, game.system.height * .2)
+      var tween = new game.Tween(logo.scale);
+        tween.to({x:.55, y:.55}, 685);
+        tween.repeat();
+        tween.yoyo();
+        tween.start();
+
+      // Add music
+      game.audio.playMusic('ppg_theme');
+
+      setTimeout(function(){
+      //   game.system.setScene('Game');
+      }, 1000)
+    }
+  });
+
+  game.createScene('Game', {
+    init: function() {
+      // Add music
+      game.audio.playMusic('ppg_fight_intro');
+      setTimeout(function(){
+        game.audio.playMusic('ppg_fight');
+      }, 8400)
+
       // Creates physics world
       this.world = new game.World(0, 2000);
 
-
       // Create background
-      bg = new game.TilingSprite('townsville_2.png');
+      bg = new game.TilingSprite('backgrounds/townsville_2.png');
       this.addObject(bg);
       this.stage.addChild(bg);
       bg.scale.set(1.45, 1.45);
@@ -18,7 +57,7 @@ game.module(
 
       // Create ground
       // Image
-      ground = new game.TilingSprite('ground.png');
+      ground = new game.TilingSprite('backgrounds/ground.png');
       ground.scale.set(1.2, 1.2);
       ground.position.set(0, 780);
       this.addObject(ground);
@@ -40,15 +79,30 @@ game.module(
       this.playerContainer = new game.Container().addTo(this.stage);
       this.player = new game.Player();
       this.player.sprite.addTo(this.playerContainer)
+
       // Set attack state
       attacking = false
 
-      // Spawn enemy
       var that = this;
-      setInterval(function(){
+      // Spawn enemy
+      spawnTimer = setInterval(function(){
         that.enemySpawn();
-      }, 500)
-      this.scoreDisplay();
+      }, 600)
+
+      // Create score text
+      this.score = new game.BitmapText('Hit Score: ' + this.player.hitScore, {font:'FridgeMagnets'});
+      this.score.position.set(50, 50)
+      this.stage.addChild(this.score);
+
+      // Update score text
+      setInterval(function(){
+          that.scoreUpdate();
+      }, 10)
+
+      // Check if dead
+      setInterval(function(){
+          that.deathUpdate();
+      }, 10)
     },
 
     keydown: function(key) {
@@ -68,8 +122,11 @@ game.module(
               setTimeout(function(){
                 bg.speed.x = 0;
                 ground.speed.x = 0;
-                attacking = false;
               }, 150)
+
+              setTimeout(function(){
+                attacking = false;
+              }, 100)
           }
           else{
             return;
@@ -88,10 +145,13 @@ game.module(
             bg.speed.x = -800;
             ground.speed.x = -600;
             setTimeout(function(){
-              bg.speed.x = 0;
-              ground.speed.x = 0;
-              attacking = false;
-            }, 150)
+                bg.speed.x = 0;
+                ground.speed.x = 0;
+              }, 150)
+
+              setTimeout(function(){
+                attacking = false;
+              }, 100)
         }
       }
       // else if (game.keyboard.down('SPACE')){
@@ -116,13 +176,34 @@ game.module(
       }
     },
 
-    scoreDisplay: function(){
-      // Add text
-      var text = new game.BitmapText('Hit Score: ' + this.player.hitScore, {font:'FridgeMagnets'});
-      text.position.set(game.system.width/2, 200)
-      this.stage.addChild(text);
+    scoreUpdate: function(){
+      this.score.setText('Hit Score: ' + this.player.hitScore);
+    },
+
+    deathUpdate: function(){
+      if (this.player.deathCounter >= 5){
+        clearTimeout(spawnTimer)
+        var that = this;
+        // setTimeout(function(){
+        //   game.audio.stopMusic('ppg_fight');
+        //   game.system.setScene('Main');
+        // }, 3000)
+      }
+    },
+
+    gameReset: function(){
+
     }
 
-});
+  });
+
+  // game.createScene('End', {
+  //   init: function() {
+  //     setTimeout(function(){
+  //         game.system.setScene('End');
+  //       }, 1000)
+  //   }
+  // })
+
 
 });

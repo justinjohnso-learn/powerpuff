@@ -10,19 +10,20 @@ game.module(
 
     init: function(x, y) {
         // Initializing animations
-        this.sprite = game.Animation.fromFrames('buttercup_idle');
-        this.sprite.scale.set(2.75, 2.75)
-        this.sprite.animationSpeed = 0.08;
+        this.sprite = game.Animation.fromFrames('blossom_idle');
+        this.sprite.scale.set(3.2, 3.2)
+        this.sprite.animationSpeed = 0.2;
         this.sprite.anchor.set(0.5, 0.5);
         this.sprite.play();
 
         this.idleAnim = this.sprite.textures;
-        this.punchLeftAnim = [game.Texture.fromFrame('buttercup_punch_left_heavy.png')];
-        this.kickLeftAnim = [game.Texture.fromFrame('buttercup_kick_left_2.png')];
-        this.punchRightAnim = [game.Texture.fromFrame('buttercup_punch_right_heavy.png')];
-        this.kickRightAnim = [game.Texture.fromFrame('buttercup_kick_right_2.png')];
-        this.collideLeftAnim = [game.Texture.fromFrame('buttercup_hit_left.png')];
-        this.collideRightAnim = [game.Texture.fromFrame('buttercup_hit_right.png')];
+        this.punchLeftAnim = game.Animation.fromFrames('blossom_punch_left').textures;
+        this.kickLeftAnim = game.Animation.fromFrames('blossom_kick_left').textures;
+        this.punchRightAnim = game.Animation.fromFrames('blossom_punch_right').textures;
+        this.kickRightAnim = game.Animation.fromFrames('blossom_kick_right').textures;
+        this.collideLeftAnim = game.Animation.fromFrames('blossom_hit_left').textures;
+        this.collideRightAnim = game.Animation.fromFrames('blossom_hit_right').textures;
+        this.deathAnim = game.Animation.fromFrames('blossom_die').textures;
 
         // Initializing physics
         this.body = new game.Body({
@@ -43,7 +44,7 @@ game.module(
         // this.body.addShape(shape);
         game.scene.world.addBody(this.body);
         game.scene.addObject(this);
-        var shape = new game.Rectangle(this.sprite.width -10, 100);
+        var shape = new game.Rectangle(this.sprite.width, this.sprite.height);
         this.body.addShape(shape);
         // this.body.velocity.x = -this.body.velocityLimit.y;
         this.body.mass = 1;
@@ -54,31 +55,33 @@ game.module(
         this.missScore = 0
         this.hitRatio = this.hitScore/this.missScore
         this.pointScore = this.hitScore * this.hitRatio
+
+        this.deathCounter = 0
     },
 
 
     punchLeft: function() {
       this.body.velocity.x = this.body.velocity.x - 50;
       this.sprite.textures = this.punchLeftAnim;
-      this.body.shape.width = 120;
+      this.body.shape.width = this.sprite.width + 30;
     },
 
     kickLeft: function() {
       this.sprite.textures = this.kickLeftAnim;
       this.body.velocity.x = this.body.velocity.x - 50;
-      this.body.shape.width = 150;
+      this.body.shape.width = this.sprite.width + 30;
     },
 
     punchRight: function() {
       this.sprite.textures = this.punchRightAnim;
       this.body.velocity.x = this.body.velocity.x + 50;
-      this.body.shape.width = 120;
+      this.body.shape.width = this.sprite.width + 30;
     },
 
     kickRight: function() {
       this.sprite.textures = this.kickRightAnim;
       this.body.velocity.x = this.body.velocity.x + 50;
-      this.body.shape.width = 150;
+      this.body.shape.width = this.sprite.width + 30;
     },
 
     collide: function(other) {
@@ -89,38 +92,48 @@ game.module(
       else if (other.collisionGroup === 2){
         if (attacking === false){
           this.sprite.textures = this.collideLeftAnim;
-          this.body.velocity.x = 1000;
+          this.body.velocity.x = 2000;
+          this.deathCounter++
+          // console.log(this.deathCounter)
         }
         else if (attacking === true){
           other.parent.kill();
           var that = this
-          setTimeout(function(){
-            that.scoreCounter();
-          }, 200)
+          // setTimeout(function(){
+            that.hitScore = that.hitScore + .5;
+          // }, 1)
         }
       }
       else if (other.collisionGroup === 3){
         if (attacking === false){
           this.sprite.textures = this.collideRightAnim;
-          this.body.velocity.x = -1000;
+          this.body.velocity.x = -2000;
+          this.deathCounter++
+          // console.log(this.deathCounter)
         }
         else if (attacking === true){
           other.parent.kill();
           var that = this
-          setTimeout(function(){
-            that.scoreCounter();
-          }, 200)
+          // setTimeout(function(){
+            that.hitScore = that.hitScore + .5;
+          // }, 1)
         }
       }
     },
 
     scoreCounter: function(){
-      this.hitScore ++
-      debugger
+      this.hitScore = this.hitScore + .5
       console.log(this.hitScore)
     },
 
     kill: function() {
+      this.sprite.textures = this.deathAnim;
+
+      var that = this
+      setTimeout(function(){
+        that.body.remove()
+        that.sprite.remove();
+      }, 1000)
     },
 
     update: function() {
@@ -130,13 +143,15 @@ game.module(
             that.sprite.textures = that.idleAnim;
             that.body.velocity.x = 0
             that.body.shape.width = 78
-          }, 100)
+          }, 150)
         }
         this.sprite.position.x = this.body.position.x;
         this.sprite.position.y = this.body.position.y;
-    },
 
-
+        if (this.deathCounter >= 5){
+          this.kill();
+        }
+    }
 
   });
 
@@ -170,6 +185,7 @@ game.module(
         this.body.collide = this.collide.bind(this);
         this.body.position.set(0, game.system.height * .7);
         this.body.velocity.x = 400;
+        this.body.shape.width = this.sprite.width
       },
 
       attack: function() {
@@ -187,7 +203,7 @@ game.module(
       },
 
       kill: function() {
-        this.body.velocity.x = -1000
+        this.body.velocity.x = -3000
         this.body.velocity.y = -400
         // this.body.mass = 1
         this.onGround = false
@@ -239,6 +255,7 @@ game.module(
         this.body.collide = this.collide.bind(this);
         this.body.position.set(game.system.width, game.system.height * .7);
         this.body.velocity.x = -400;
+        this.body.shape.width = this.sprite.width
       },
 
       attack: function() {
@@ -254,7 +271,7 @@ game.module(
       },
 
       kill: function() {
-        this.body.velocity.x = 1000
+        this.body.velocity.x = 3000
         this.body.velocity.y = 400
         this.body.mass = 1
         this.onGround = false

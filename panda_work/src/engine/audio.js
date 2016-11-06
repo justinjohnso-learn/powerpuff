@@ -110,7 +110,7 @@ game.createClass('Audio', {
             errorCallback
         );
     },
-    
+
     _load: function(path, callback, errorCallback) {
         if (!game.Audio.enabled) {
             if (typeof callback === 'function') callback();
@@ -119,7 +119,7 @@ game.createClass('Audio', {
 
         var ext = path.split('.').pop();
         if (this.formats.indexOf(ext) === -1) ext = this.formats[0];
-        
+
         var realPath = path.replace(/[^\.]+$/, ext + game.nocache);
 
         // Web Audio
@@ -196,7 +196,7 @@ game.createClass('Audio', {
             var audio = this.context.createBufferSource();
             audio.buffer = this.sources[name].audio;
             audio.loop = !!loop;
-            audio.playbackRate.value = rate || 1;
+            audio.playbackRate.value = 1;
             audio.callback = callback;
             audio.onended = this._onended.bind(this, audioId);
 
@@ -414,7 +414,7 @@ game.createClass('Audio', {
         this._resume(id);
         this.playingSounds.push(id);
         this.pausedSounds.splice(index, 1);
-        
+
         return true;
     },
 
@@ -473,14 +473,14 @@ game.createClass('Audio', {
     **/
     playMusic: function(name, loop) {
         var volume = this.musicMuted ? 0 : this.musicVolume;
-        
+
         if (typeof loop === 'undefined') loop = true;
 
         if (this.currentMusic) this._stop(this.currentMusic);
-        
+
         this.currentMusic = this._play(name, !!loop, volume);
         this.currentMusicName = name;
-        
+
         return !!this.currentMusic;
     },
 
