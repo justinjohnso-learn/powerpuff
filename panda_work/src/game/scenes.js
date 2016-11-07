@@ -5,8 +5,6 @@ game.module(
 
   game.createScene('Main', {
     init: function() {
-      game.scene.clear('Game');
-      game.scene.exit('Game');
       // Create menu background
       bg = new game.Sprite('backgrounds/the_girls.jpg');
       this.addObject(bg);
@@ -21,15 +19,34 @@ game.module(
       this.stage.addChild(logo);
       logo.anchor.set(.5, .5)
       logo.scale.set(.5, .5);
-      logo.position.set(game.system.width * .54, game.system.height * .2)
+      logo.position.set(game.system.width * .54, game.system.height * .17)
       var tween = new game.Tween(logo.scale);
         tween.to({x:.55, y:.55}, 685);
         tween.repeat();
         tween.yoyo();
         tween.start();
 
+      // Add play button
+      var playButton = new game.Sprite('play_button.png');
+      playButton.interactive = true;
+      playButton.buttonMode = true;
+      playButton.click = function(){
+        game.system.setScene('Game');
+      }
+      playButton.mouseover = function(){
+        playButton.scale.set(1.6, 1.6);
+      }
+      playButton.mouseout = function(){
+        playButton.scale.set(1.5, 1.5);
+      }
+      playButton.scale.set(1.5, 1.5)
+      playButton.anchor.set(.5, .5);
+      playButton.position.set(1010, 450);
+      this.stage.addChild(playButton);
+
       // Add music
       game.audio.playMusic('ppg_theme');
+
 
       setTimeout(function(){
       //   game.system.setScene('Game');
@@ -76,8 +93,21 @@ game.module(
       this.world.addBody(groundBody);
 
       // Spawn player
+      var randomSprite = function(){
+        var randNum = Math.floor(Math.random()*3);
+        if (randNum === 0){
+          return new game.Blossom();
+        }
+        else if (randNum === 1){
+          return new game.Bubbles();
+        }
+        else if (randNum === 2){
+          return new game.Buttercup();
+        }
+
+      }
       this.playerContainer = new game.Container().addTo(this.stage);
-      this.player = new game.Player();
+      this.player = randomSprite();
       this.player.sprite.addTo(this.playerContainer)
 
       // Set attack state
@@ -85,12 +115,29 @@ game.module(
 
       var that = this;
       // Spawn enemy
-      spawnTimer = setInterval(function(){
-        that.enemySpawn();
-      }, 600)
+      setTimeout(function(){
+        spawnTimer = setInterval(function(){
+          that.enemySpawn();
+        }, 700)
+      }, 1500)
+
+      // Add start text
+      this.introText1 = new game.BitmapText('The city of Townsville', {font:'powerpuff'});
+      this.introText1.position.set(120, 300);
+      this.introText1.scale.set(1.8, 1.8);
+      this.stage.addChild(this.introText1);
+      this.introText2 = new game.BitmapText('is under attack!', {font:'powerpuff'});
+      this.introText2.position.set(380, 450);
+      this.introText2.scale.set(1.8, 1.8);
+      this.stage.addChild(this.introText2);
+      var that = this;
+      setTimeout(function(){
+        that.introText1.remove();
+        that.introText2.remove();
+      }, 3000)
 
       // Create score text
-      this.score = new game.BitmapText('Hit Score: ' + this.player.hitScore, {font:'FridgeMagnets'});
+      this.score = new game.BitmapText('Hit Score - ' + this.player.hitScore, {font:'powerpuff'});
       this.score.position.set(50, 50)
       this.stage.addChild(this.score);
 
@@ -177,23 +224,47 @@ game.module(
     },
 
     scoreUpdate: function(){
-      this.score.setText('Hit Score: ' + this.player.hitScore);
+      this.score.setText('Hit Score - ' + this.player.hitScore);
     },
 
     deathUpdate: function(){
       if (this.player.deathCounter >= 5){
+        // Stop spawning enemies
         clearTimeout(spawnTimer)
+        // Add reset text
         var that = this;
-        // setTimeout(function(){
-        //   game.audio.stopMusic('ppg_fight');
-        //   game.system.setScene('Main');
-        // }, 3000)
+        setTimeout(function(){
+          that.gameOver1 = new game.BitmapText('Dang, that looked', {font:'powerpuff'});
+          that.gameOver1.position.set(370, 150);
+          that.gameOver1.scale.set(1.8, 1.8);
+          that.stage.addChild(that.gameOver1);
+          that.gameOver2 = new game.BitmapText('painful!', {font:'powerpuff'});
+          that.gameOver2.position.set(700, 300);
+          that.gameOver2.scale.set(1.8, 1.8);
+          that.stage.addChild(that.gameOver2);
+
+          // Add retry button
+          var retryButton = new game.Sprite('play_again_button.png');
+          retryButton.interactive = true;
+          retryButton.buttonMode = true;
+          retryButton.mousedown = function(){
+            document.location.reload(true);
+          }
+          // retryButton.mouseover = function(){
+          //   retryButton.scale.set(1.6, 1.6);
+          // }
+          // retryButton.mouseout = function(){
+          //   retryButton.scale.set(1.5, 1.5);
+          // }
+          retryButton.scale.set(1.5, 1.5)
+          retryButton.anchor.set(.5, .5);
+          retryButton.position.set(1010, 550);
+          that.stage.addChild(retryButton);
+        }, 500)
+
       }
-    },
-
-    gameReset: function(){
-
     }
+
 
   });
 

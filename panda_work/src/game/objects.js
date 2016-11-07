@@ -5,25 +5,8 @@ game.module(
 .body(function() {
 
   game.createClass('Player', {
-    // Borrowed onGround method from https://github.com/ekelokorpi/panda.js-engine-games/tree/master/endlessrunner
-    onGround: false,
-
-    init: function(x, y) {
-        // Initializing animations
-        this.sprite = game.Animation.fromFrames('blossom_idle');
-        this.sprite.scale.set(3.2, 3.2)
-        this.sprite.animationSpeed = 0.2;
-        this.sprite.anchor.set(0.5, 0.5);
-        this.sprite.play();
-
-        this.idleAnim = this.sprite.textures;
-        this.punchLeftAnim = game.Animation.fromFrames('blossom_punch_left').textures;
-        this.kickLeftAnim = game.Animation.fromFrames('blossom_kick_left').textures;
-        this.punchRightAnim = game.Animation.fromFrames('blossom_punch_right').textures;
-        this.kickRightAnim = game.Animation.fromFrames('blossom_kick_right').textures;
-        this.collideLeftAnim = game.Animation.fromFrames('blossom_hit_left').textures;
-        this.collideRightAnim = game.Animation.fromFrames('blossom_hit_right').textures;
-        this.deathAnim = game.Animation.fromFrames('blossom_die').textures;
+    init: function(x, y){
+        this.initSprite(x, y);
 
         // Initializing physics
         this.body = new game.Body({
@@ -61,27 +44,27 @@ game.module(
 
 
     punchLeft: function() {
-      this.body.velocity.x = this.body.velocity.x - 50;
+      this.body.velocity.x = this.body.velocity.x - 100;
       this.sprite.textures = this.punchLeftAnim;
-      this.body.shape.width = this.sprite.width + 30;
+      this.body.shape.width = this.sprite.width + 150;
     },
 
     kickLeft: function() {
       this.sprite.textures = this.kickLeftAnim;
-      this.body.velocity.x = this.body.velocity.x - 50;
-      this.body.shape.width = this.sprite.width + 30;
+      this.body.velocity.x = this.body.velocity.x - 100;
+      this.body.shape.width = this.sprite.width + 150;
     },
 
     punchRight: function() {
       this.sprite.textures = this.punchRightAnim;
-      this.body.velocity.x = this.body.velocity.x + 50;
-      this.body.shape.width = this.sprite.width + 30;
+      this.body.velocity.x = this.body.velocity.x + 100;
+      this.body.shape.width = this.sprite.width + 150;
     },
 
     kickRight: function() {
       this.sprite.textures = this.kickRightAnim;
-      this.body.velocity.x = this.body.velocity.x + 50;
-      this.body.shape.width = this.sprite.width + 30;
+      this.body.velocity.x = this.body.velocity.x + 100;
+      this.body.shape.width = this.sprite.width + 150;
     },
 
     collide: function(other) {
@@ -102,6 +85,7 @@ game.module(
           // setTimeout(function(){
             that.hitScore = that.hitScore + .5;
           // }, 1)
+          // this.scoreCounter();
         }
       }
       else if (other.collisionGroup === 3){
@@ -117,14 +101,17 @@ game.module(
           // setTimeout(function(){
             that.hitScore = that.hitScore + .5;
           // }, 1)
+          // this.scoreCounter();
         }
       }
     },
 
-    scoreCounter: function(){
-      this.hitScore = this.hitScore + .5
-      console.log(this.hitScore)
-    },
+    // scoreCounter: function(){
+    //   setTimeout(function(){
+    //     this.hitScore = this.hitScore + 100
+    //     console.log('done')
+    //   }, 100)
+    // },
 
     kill: function() {
       this.sprite.textures = this.deathAnim;
@@ -155,12 +142,74 @@ game.module(
 
   });
 
+  game.createClass('Blossom', 'Player', {
+    initSprite: function(x, y){
+      // Initializing animations
+        this.sprite = game.Animation.fromFrames('blossom_idle');
+        this.sprite.scale.set(3.2, 3.2)
+        this.sprite.animationSpeed = 0.2;
+        this.sprite.anchor.set(0.5, 0.5);
+        this.sprite.play();
+
+        this.idleAnim = this.sprite.textures;
+        this.punchLeftAnim = game.Animation.fromFrames('blossom_punch_left').textures;
+        this.kickLeftAnim = game.Animation.fromFrames('blossom_kick_left').textures;
+        this.punchRightAnim = game.Animation.fromFrames('blossom_punch_right').textures;
+        this.kickRightAnim = game.Animation.fromFrames('blossom_kick_right').textures;
+        this.collideLeftAnim = game.Animation.fromFrames('blossom_hit_left').textures;
+        this.collideRightAnim = game.Animation.fromFrames('blossom_hit_right').textures;
+        this.deathAnim = game.Animation.fromFrames('blossom_die').textures;
+      }
+
+  });
+
+  game.createClass('Bubbles', 'Player', {
+    initSprite: function(x, y){
+      // Initializing animations
+        this.sprite = game.Animation.fromFrames('bubbles_idle');
+        this.sprite.scale.set(3.2, 3.2)
+        this.sprite.animationSpeed = 0.1;
+        this.sprite.anchor.set(0.5, 0.5);
+        this.sprite.play();
+
+        this.idleAnim = this.sprite.textures;
+        this.punchLeftAnim = game.Animation.fromFrames('bubbles_punch_left').textures;
+        this.kickLeftAnim = game.Animation.fromFrames('bubbles_kick_left').textures;
+        this.punchRightAnim = game.Animation.fromFrames('bubbles_punch_right').textures;
+        this.kickRightAnim = game.Animation.fromFrames('bubbles_kick_right').textures;
+        this.collideLeftAnim = game.Animation.fromFrames('bubbles_hit_left').textures;
+        this.collideRightAnim = game.Animation.fromFrames('bubbles_hit_right').textures;
+        this.deathAnim = game.Animation.fromFrames('bubbles_die').textures;
+      }
+
+  });
+
+  game.createClass('Buttercup', 'Player', {
+    initSprite: function(x, y){
+      // Initializing animations
+        this.sprite = game.Animation.fromFrames('buttercup_idle');
+        this.sprite.scale.set(3.2, 3.2)
+        this.sprite.animationSpeed = 0.2;
+        this.sprite.anchor.set(0.5, 0.5);
+        this.sprite.play();
+
+        this.idleAnim = this.sprite.textures;
+        this.punchLeftAnim = game.Animation.fromFrames('buttercup_punch_left').textures;
+        this.kickLeftAnim = game.Animation.fromFrames('buttercup_kick_left').textures;
+        this.punchRightAnim = game.Animation.fromFrames('buttercup_punch_right').textures;
+        this.kickRightAnim = game.Animation.fromFrames('buttercup_kick_right').textures;
+        this.collideLeftAnim = game.Animation.fromFrames('buttercup_hit_left').textures;
+        this.collideRightAnim = game.Animation.fromFrames('buttercup_hit_right').textures;
+        this.deathAnim = game.Animation.fromFrames('buttercup_die').textures;
+      }
+
+  });
+
   game.createClass('EnemyLeft', {
-      onGround: false,
       init: function(x, y) {
-        this.sprite = game.Animation.fromFrames('running_guy_left');
+        this.sprite = game.Animation.fromFrames('largemouth_walk_right');
         this.sprite.scale.set(2.5, 2.5);
-        this.sprite.animationSpeed = 0.08;
+        this.sprite.animationSpeed = 0.2;
         this.sprite.anchor.set(0.5, 0.5);
         this.sprite.play();
 
@@ -203,6 +252,7 @@ game.module(
       },
 
       kill: function() {
+        // this.sprite = game.Textures('largemouth_die_right')
         this.body.velocity.x = -3000
         this.body.velocity.y = -400
         // this.body.mass = 1
@@ -225,11 +275,10 @@ game.module(
   });
 
   game.createClass('EnemyRight', {
-      onGround: false,
       init: function(x, y) {
-        this.sprite = game.Animation.fromFrames('running_guy_right');
+        this.sprite = game.Animation.fromFrames('largemouth_walk_left');
         this.sprite.scale.set(2.5, 2.5);
-        this.sprite.animationSpeed = 0.08;
+        this.sprite.animationSpeed = 0.2;
         this.sprite.anchor.set(0.5, 0.5);
         this.sprite.play();
 
@@ -271,6 +320,7 @@ game.module(
       },
 
       kill: function() {
+        // this.sprite = game.Textures('largemouth_die_left')
         this.body.velocity.x = 3000
         this.body.velocity.y = 400
         this.body.mass = 1
