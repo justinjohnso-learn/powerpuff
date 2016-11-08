@@ -36,6 +36,7 @@ At this point my MVP was done, and I could add on my finishing touches: play and
 ### What's Left
 
 Honestly, I'm probably going to continue working on this project, as there are still a few things I'd like to add:
+
     * A leaderboard
     * Reworked, more consistent physics
     * Randomized hit vectors (sending enemies flying into the air)
@@ -46,6 +47,7 @@ Honestly, I'm probably going to continue working on this project, as there are s
 ### Unsolved Issues
 
 A couple things that could use some work:
+
     * Adding mass/gravity/vectors/force to my physics (hitting an enemy just sets a velocity right now)
     * Fixing the scoring system. As it stands, the score is accurate about 90% of the time, as it counts each hit 2~4 times instead of once.
     * Figuring out a more consistent system for determining attack states. I originally wanted to include a counter of misses (player attacks but doesn't hit an enemy), and then use a ratio of that to hits to give the player a score, but couldn't figure out how to code a "missed" state.
