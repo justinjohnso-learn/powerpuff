@@ -2,7 +2,7 @@
 
 ![](http://vignette2.wikia.nocookie.net/powerpuff/images/c/c9/Mojo_jojo_aparincia2.png/revision/latest?cb=20160612021838)
 
---- *
+---
 ## The City of Townsville is under attack!
 An endless horde of monsters has descended on the city, and it's up to The Powerpuff Girls to stop them! How long can you survive?
 
