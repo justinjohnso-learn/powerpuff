@@ -153,7 +153,7 @@ game.module(
       }, 10)
 
       // Check if dead
-      setInterval(function(){
+      isDead = setInterval(function(){
           that.deathUpdate();
       }, 10)
     },
@@ -261,6 +261,11 @@ game.module(
       if (this.player.deathCounter >= 5){
         // Stop spawning enemies
         clearTimeout(spawnTimer)
+        // Stop checking if dead
+        clearTimeout(isDead)
+        // Play sad noise
+        var youDied = game.audio.playSound('sad_trombone');
+        game.audio.setVolume(youDied, 1.7);
         // Add reset text
         var that = this;
         setTimeout(function(){

@@ -35,9 +35,9 @@ game.module(
         this.body.position.set(game.system.width * .5, game.system.height * .7);
 
         this.hitScore = 0
-        this.missScore = 0
-        this.hitRatio = this.hitScore/this.missScore
-        this.pointScore = this.hitScore * this.hitRatio
+        // this.missScore = 0
+        // this.hitRatio = this.hitScore/this.missScore
+        // this.pointScore = this.hitScore * this.hitRatio
 
         this.deathCounter = 0
     },
@@ -138,6 +138,7 @@ game.module(
         this.sprite.position.y = this.body.position.y;
 
         if (this.deathCounter >= 5){
+          this.deathCounter = 5;
           this.kill();
         }
     }
