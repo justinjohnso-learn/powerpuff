@@ -35,11 +35,14 @@ game.module(
     game.addAsset('powerpuff_font/powerpuff.fnt')
 
   // Audio
+    // https://www.youtube.com/watch?v=a6epMQlNWtI
     game.addAudio('audio/ppg_theme.ogg', 'ppg_theme');
+    // https://www.youtube.com/watch?v=ltHN_1Bzd30
     game.addAudio('audio/ppg_fight_loop_intro.ogg', 'ppg_fight_intro')
     game.addAudio('audio/ppg_fight_loop.ogg', 'ppg_fight')
 
-    // http://www.sounddogs.com/extendedsearch.asp?keyword=cartoon+fight+punch&ddCategory=-1
+    // http://www.sounddogs.com/
+      // Many of these I acquired in the past from sound designing
     game.addAudio('audio/sfx/punch.ogg', 'punch')
     game.addAudio('audio/sfx/hit_sound.ogg', 'hit_sound')
     game.addAudio('audio/sfx/attack_sound_1.ogg', 'attack_sound_1')
