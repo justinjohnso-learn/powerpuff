@@ -256,7 +256,7 @@ game.module(
 
       kill: function() {
         var randSound = function(){
-          var randNum = Math.floor(Math.random()*70);
+          var randNum = Math.floor(Math.random()*80);
           switch (randNum){
             case 0:
               return 'my_leg_1';
@@ -343,7 +343,7 @@ game.module(
 
       kill: function() {
         var randSound = function(){
-          var randNum = Math.floor(Math.random()*70);
+          var randNum = Math.floor(Math.random()*80);
           switch (randNum){
             case 0:
               return 'my_leg_1';
